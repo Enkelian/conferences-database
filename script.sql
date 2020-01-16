@@ -1946,6 +1946,45 @@ AS
 END
 GO
 
+--24 nowy
+CREATE TRIGGER [Trig_checkDay]
+ON Days
+AFTER INSERT
+AS
+	BEGIN
+	SET NOCOUNT ON
+	IF NOT EXISTS (
+			SELECT ConferenceID
+			FROM Conferences AS c
+			JOIN inserted AS i ON i.ConferenceID = c.ConferenceID)
+		BEGIN
+		;THROW 52000, 'Conference with given ConferenceID does not exist.', 1
+		END
+
+	DECLARE @DayNumber int = (
+			SELECT DayNumber
+			FROM inserted)
+	DECLARE @ConferenceID int = (
+			SELECT ConferenceID
+			FROM inserted)
+
+	IF @DayNumber = 1 AND (SELECT COUNT(DayNumber)
+								FROM Days
+								WHERE ConferenceID = @ConferenceID) > 1
+		BEGIN
+		;THROW 52000, 'Cannot add first day if there are already any days of conference', 1
+		END
+
+		IF @DayNumber <> 1 AND (SELECT COUNT(*)
+								FROM Days
+								WHERE ConferenceID = @ConferenceID AND DayNumber = @DayNumber - 1) > 1
+		BEGIN
+		;THROW 52000, 'Cannot add a day that does not have a day that precedes it.', 1
+		END					
+
+END
+GO
+
 -- INDEKSY
 
 CREATE NONCLUSTERED INDEX [INDEX_workshopBookingsDayBookingID] ON [WorkshopBookings]
