@@ -18,6 +18,7 @@ CREATE TABLE [Conferences] (
   [EndDate] date NOT NULL,
   [IsCancelled] bit NOT NULL
   CONSTRAINT ConferencesPK PRIMARY KEY (ConferenceID)
+  CONSTRAINT EndDateAfterStartDate CHECK (EndDate>=StartDate)
 )
 GO
 	
@@ -219,10 +220,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 		BEGIN TRY
-			IF(@StartDate > @EndDate)
-			BEGIN
-			;THROW 52000, 'Invalid StartDate or EndDate',1
-			END
 
 /*			IF(@StartDate < GETDATE())
 			BEGIN
