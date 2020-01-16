@@ -52,7 +52,7 @@ CREATE TABLE [Workshops] (
   [Classroom] varchar(50) NOT NULL,
   [BuildingID] int NOT NULL
   CONSTRAINT WorkshopsPK PRIMARY KEY (WorkshopID),
-  CONSTRAINT EndTimeAfterStartTime CHECK (EndTime>Start)
+  CONSTRAINT EndTimeAfterStartTime CHECK (EndTime>StartTime)
 )
 GO
 
