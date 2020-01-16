@@ -17,7 +17,7 @@ CREATE TABLE [Conferences] (
   [StartDate] date NOT NULL,
   [EndDate] date NOT NULL,
   [IsCancelled] bit NOT NULL
-  CONSTRAINT ConferencesPK PRIMARY KEY (ConferenceID)
+  CONSTRAINT ConferencesPK PRIMARY KEY (ConferenceID),
   CONSTRAINT EndDateAfterStartDate CHECK (EndDate>=StartDate)
 )
 GO
@@ -60,8 +60,8 @@ CREATE TABLE [Buildings] (
   [Address] nvarchar(200) NOT NULL,
   [Name] nvarchar(255),
   [Phone] varchar(20)
-  CONSTRAINT BuildingsPK PRIMARY KEY (BuildingID)
-  CONSTRAINT UniqueCityAddress UNIQUE (City, Address),
+  CONSTRAINT BuildingsPK PRIMARY KEY (BuildingID),
+  CONSTRAINT UniqueCityAddress UNIQUE (City, Address)
 
 )
 GO
