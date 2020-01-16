@@ -1967,7 +1967,10 @@ AS
 	DECLARE @ConferenceID int = (
 			SELECT ConferenceID
 			FROM inserted)
-
+	DECLARE @isConferenceCancelled bit = (
+		SELECT IsCancelled FROM Conferences
+		WHERE ConferenceID = @ConferenceID
+	)
 	IF @DayNumber = 1 AND (SELECT COUNT(DayNumber)
 								FROM Days
 								WHERE ConferenceID = @ConferenceID) > 1
@@ -1980,7 +1983,12 @@ AS
 								WHERE ConferenceID = @ConferenceID AND DayNumber = @DayNumber - 1) > 1
 		BEGIN
 		;THROW 52000, 'Cannot add a day that does not have a day that precedes it.', 1
-		END					
+		END	
+
+	IF (@isConferenceCancelled = 1)
+		BEGIN
+		;THROW 52000, 'Cannot add day to cancelled conference.', 1
+		END				
 
 END
 GO
