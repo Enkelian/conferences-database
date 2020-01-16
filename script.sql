@@ -846,6 +846,9 @@ BEGIN
 		BEGIN
 		;THROW 52000, 'SendDate cannot be after AcceptedDate', 1
 		END
+
+		INSERT INTO Payments(ConferenceBookingID, Total, SendDate, AcceptedDate)
+		VALUES(@ConferenceBookingID, @Total, @SendDate, @AcceptedDate)
 	
 	END TRY
 	BEGIN CATCH
