@@ -2164,6 +2164,31 @@ AS
 END
 GO
 
+--30 nowy
+CREATE TRIGGER [Trig_checkDayReservation]
+ON DayReservations
+AFTER INSERT
+AS
+	SET NOCOUNT ON
+	BEGIN
+	DECLARE @ParticipantID int = (SELECT ParticipantID FROM inserted)
+	DECLARE @DayBookingID int = (SELECT DayBookingID FROM inserted)
+	IF @ParticipantID NOT IN (
+			SELECT ParticipantID
+			FROM Participants)
+		BEGIN
+		;THROW 50001, 'Participant with given ParticipantID does not exist', 1
+		END
+	IF @DayBookingID NOT IN (
+			SELECT DayBookingID
+			FROM DayBookings)
+		BEGIN
+		;THROW 50001, 'Day booking with given DayBookingID does not exist', 1
+		END
+
+END
+GO
+
 -- INDEKSY
 
 CREATE NONCLUSTERED INDEX [INDEX_workshopBookingsDayBookingID] ON [WorkshopBookings]
