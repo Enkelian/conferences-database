@@ -1994,7 +1994,7 @@ END
 GO
 
 --25 nowy
-CREATE TRIGGER [Trig_checkDay]
+CREATE TRIGGER [Trig_checkWorkshop]
 ON Workshops
 AFTER INSERT
 AS
