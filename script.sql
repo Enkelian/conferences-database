@@ -310,11 +310,6 @@ BEGIN
 		;THROW 52000, 'Conference with given ConferenceID does not exist.', 1
 		END
 
-		IF(@MaxParticipants <= 0)
-		BEGIN
-		;THROW 52000, 'Number of participants must be a positive number.',1
-		END
-
 		IF(@DayNumber IN(
 			SELECT DayNumber
 			FROM Days
