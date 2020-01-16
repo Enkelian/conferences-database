@@ -1937,7 +1937,7 @@ END
 GO
 
 --24 nowy
-CREATE TRIGGER [Trig_checkDay]
+CREATE TRIGGER [TRIG_checkDay]
 ON Days
 AFTER INSERT
 AS
@@ -1984,7 +1984,7 @@ END
 GO
 
 --25 nowy
-CREATE TRIGGER [Trig_checkWorkshop]
+CREATE TRIGGER [TRIG_checkWorkshop]
 ON Workshops
 AFTER INSERT
 AS
@@ -2016,7 +2016,7 @@ END
 GO
 
 --26 nowy
-CREATE TRIGGER [Trig_checkEmployeesConferences]
+CREATE TRIGGER [TRIG_checkEmployeesConferences]
 ON EmployeesConferences
 AFTER INSERT
 AS
@@ -2042,7 +2042,7 @@ END
 GO
 
 --27 nowy
-CREATE TRIGGER [Trig_checkConferenceBooking]
+CREATE TRIGGER [TRIG_checkConferenceBooking]
 ON ConferenceBookings
 AFTER INSERT
 AS
@@ -2082,7 +2082,7 @@ END
 GO
 
 --28 nowy
-CREATE TRIGGER [Trig_checkDayBooking]
+CREATE TRIGGER [TRIG_checkDayBooking]
 ON DayBookings
 AFTER INSERT
 AS
@@ -2124,7 +2124,7 @@ END
 GO
 
 --29 nowy
-CREATE TRIGGER [Trig_checkWorkshopBooking]
+CREATE TRIGGER [TRIG_checkWorkshopBooking]
 ON WorkshopBookings
 AFTER INSERT
 AS
@@ -2168,7 +2168,7 @@ END
 GO
 
 --30 nowy
-CREATE TRIGGER [Trig_checkDayReservation]
+CREATE TRIGGER [TRIG_checkDayReservation]
 ON DayReservations
 AFTER INSERT
 AS
