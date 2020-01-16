@@ -2193,8 +2193,8 @@ END
 GO
 
 --31 nowy
-CREATE TRIGGER [Trig_checkWorkshopReservation]
-ON WorkshopsReservations
+CREATE TRIGGER [TRIG_checkWorkshopReservation]
+ON WorkshopReservations
 AFTER INSERT
 AS
 	SET NOCOUNT ON
