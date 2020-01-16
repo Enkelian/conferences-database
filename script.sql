@@ -2043,6 +2043,46 @@ AS
 END
 GO
 
+--27 nowy
+CREATE TRIGGER [Trig_checkconferenceBooking]
+ON ConferenceBookings
+AFTER INSERT
+AS
+	SET NOCOUNT ON
+	BEGIN
+	DECLARE @ConferenceID int = (SELECT ConferenceID FROM inserted)
+	DECLARE @BookingDate datetime = (SELECT BookingDate FROM inserted)
+	DECLARE @ClientID int = (SELECT ClientID FROM inserted)
+	IF (@ConferenceID NOT IN(
+			SELECT ConferenceID
+			FROM Conferences))
+		BEGIN
+		;THROW 50001, 'Conference with given ConferenceID does not exist', 1
+		END
+	IF (@BookingDate > (
+			SELECT StartDate 
+			FROM Conferences
+			WHERE ConferenceID = @ConferenceID))
+		BEGIN
+		;THROW 50001, 'Chosen conference already took place.', 1
+		END
+	IF(@ClientID NOT IN(
+			SELECT ClientID
+			FROM Clients))
+		BEGIN
+		;THROW 50001, 'Client with given ClientID does not exist.', 1
+		END
+	IF (
+			SELECT COUNT(ClientID)
+			FROM ConferenceBookings
+			WHERE ClientID = @ClientID AND ConferenceID = @ConferenceID) > 1
+		BEGIN
+		;THROW 50001, 'Cannot add already existing booking.', 1
+		END
+
+END
+GO
+
 
 -- INDEKSY
 
