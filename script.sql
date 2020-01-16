@@ -6,7 +6,7 @@ CREATE TABLE [DayPrices] (
   [DayID] int NOT NULL,
   [Value] money NOT NULL,
   [ToDate] date NOT NULL,
-  [StudentDiscount] real NOT NULL CHECK (StudentDiscount>0 AND StudentDiscount<1)
+  [StudentDiscount] real NOT NULL CHECK (StudentDiscount>=0 AND StudentDiscount<=1)
   CONSTRAINT DayPricesPK PRIMARY KEY (PriceID)
 )
 GO
@@ -267,11 +267,6 @@ BEGIN
 			)
 		BEGIN
 		;THROW 52000, 'Date cannot follow conference start date', 1
-		END
-
-		IF(@StudentDiscount NOT BETWEEN 0 AND 1)
-		BEGIN
-		;THROW 52000, 'Student discount must be a number between 0 and 1', 1
 		END
 
 		DECLARE @isConferenceCancelled int = (
