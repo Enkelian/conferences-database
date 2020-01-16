@@ -1904,7 +1904,7 @@ END
 GO
 
 --23 nowy trigger
-CREATE TRIGGER [Trig_checkDayPrices]
+CREATE TRIGGER [TRIG_checkDayPrices]
 ON DayPrices
 AFTER INSERT
 AS
