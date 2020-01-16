@@ -96,6 +96,7 @@ CREATE TABLE [DayBookings] (
   [NumberOfParticipants] int NOT NULL CHECK (NumberOfParticipants > 0),
   [NumberOfStudents] int NOT NULL CHECK (NumberOfStudents >= 0)
   CONSTRAINT DayBookingsPK PRIMARY KEY (DayBookingID)
+  CONSTRAINT LessStudentsThanParticipants CHECK (NumberOfStudents<=NumberOfParticipants)
 )
 GO
 
