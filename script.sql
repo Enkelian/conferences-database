@@ -799,7 +799,7 @@ BEGIN
 	BEGIN TRY
 		
 
-		IF (SELECT IsPerson
+		/*IF (SELECT IsPerson
 			FROM Clients
 			WHERE ClientID = @ClientID) = 1 AND
 			((SELECT COUNT(ParticipantID)
@@ -807,7 +807,7 @@ BEGIN
 			WHERE ClientID = @ClientID) > 0)
 		BEGIN
 		;THROW 52000, 'Individual client can have only one participant', 1
-		END
+		END*/
 
 
 		INSERT INTO Participants(ClientID, FirstName, LastName, StudentCard, BirthDate, Email, Password)
@@ -831,12 +831,12 @@ BEGIN
 	SET NOCOUNT ON 
 	BEGIN TRY
 		
-		IF @ConferenceBookingID NOT IN (
+		/*IF @ConferenceBookingID NOT IN (
 			SELECT ConferenceBookingID
 			FROM ConferenceBookings)
 		BEGIN
 		;THROW 52000, 'Conference booking with given ConferenceBookingID does not exist.', 1
-		END
+		END*/
 
 		IF @SendDate > @AcceptedDate
 		BEGIN
