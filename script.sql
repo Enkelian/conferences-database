@@ -1953,7 +1953,7 @@ AS
 			FROM Conferences AS c
 			JOIN inserted AS i ON i.ConferenceID = c.ConferenceID)
 		BEGIN
-		;THROW 52000, 'Conference with given ConferenceID does not exist.', 1
+		;THROW 50001, 'Conference with given ConferenceID does not exist.', 1
 		END
 
 	DECLARE @DayNumber int = (
@@ -1970,19 +1970,19 @@ AS
 								FROM Days
 								WHERE ConferenceID = @ConferenceID) > 1
 		BEGIN
-		;THROW 52000, 'Cannot add first day if there are already any days of conference', 1
+		;THROW 50001, 'Cannot add first day if there are already any days of conference', 1
 		END
 
 		IF @DayNumber <> 1 AND (SELECT COUNT(*)
 								FROM Days
 								WHERE ConferenceID = @ConferenceID AND DayNumber = @DayNumber - 1) > 1
 		BEGIN
-		;THROW 52000, 'Cannot add a day that does not have a day that precedes it.', 1
+		;THROW 50001, 'Cannot add a day that does not have a day that precedes it.', 1
 		END	
 
 	IF (@isConferenceCancelled = 1)
 		BEGIN
-		;THROW 52000, 'Cannot add day to cancelled conference.', 1
+		;THROW 50001, 'Cannot add day to cancelled conference.', 1
 		END				
 
 END
@@ -2004,19 +2004,45 @@ AS
 		FROM Days
 		JOIN inserted AS i ON i.DayID = Days.DayID)
 		BEGIN
-		;THROW 52000, 'Day with given DayID does not exist.', 1
+		;THROW 50001, 'Day with given DayID does not exist.', 1
 		END
 	IF NOT EXISTS(
 			SELECT b.BuildingID
 			FROM Buildings AS b
 			JOIN inserted AS i ON i.BuildingID = b.BuildingID)
 		BEGIN
-		;THROW 52000, 'Building with given BuildingID does not exist.', 1
+		;THROW 50001, 'Building with given BuildingID does not exist.', 1
 		END
 	IF (@isConferenceCancelled = 1)
 		BEGIN
-		;THROW 52000, 'Cannot add workshop to cancelled conference.', 1
+		;THROW 50001, 'Cannot add workshop to cancelled conference.', 1
 		END
+END
+GO
+
+--26 nowy
+CREATE TRIGGER [Trig_checkBuilding]
+ON EmployeesConferences
+AFTER INSERT
+AS
+	SET NOCOUNT ON
+	BEGIN
+	DECLARE @EmployeeID int = (SELECT EmployeeID FROM inserted)
+	DECLARE @ConferenceID int = (SELECT ConferenceID FROM inserted)
+	IF @EmployeeID NOT IN (
+			SELECT EmployeeID
+			FROM Employees)
+		BEGIN
+		;THROW 50001, 'Employee with given EmployeeID does not exist', 1
+		END
+
+	IF @ConferenceID NOT IN (
+				SELECT ConferenceID
+				FROM Conferences)
+			BEGIN
+			;THROW 50001, 'Conference with given ConferenceID does not exist', 1
+			END
+	
 END
 GO
 
