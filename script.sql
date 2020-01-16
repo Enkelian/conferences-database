@@ -2215,6 +2215,27 @@ AS
 END
 GO
 
+--32 nowy
+CREATE TRIGGER [Trig_checkParticipant]
+ON Participants
+AFTER INSERT
+AS
+	SET NOCOUNT ON
+	BEGIN
+	DECLARE @ClientID int = (SELECT ClientID FROM inserted)
+	DECLARE @IsPerson bit = (SELECT IsPerson FROM Clients AS cl
+							JOIN inserted AS i ON i.ClientID = cl.ClientID)
+	IF @IsPerson = 1 AND
+			((SELECT COUNT(ParticipantID)
+			FROM Participants
+			WHERE ClientID = @ClientID) > 1)
+		BEGIN
+		;THROW 50001, 'Individual client can have only one participant', 1
+		END
+
+END
+GO
+
 -- INDEKSY
 
 CREATE NONCLUSTERED INDEX [INDEX_workshopBookingsDayBookingID] ON [WorkshopBookings]
