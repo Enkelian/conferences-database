@@ -52,7 +52,7 @@ CREATE TABLE [Workshops] (
   [Classroom] varchar(50) NOT NULL,
   [BuildingID] int NOT NULL
   CONSTRAINT WorkshopsPK PRIMARY KEY (WorkshopID)
-  CONSTRAINT EndTimeAfterStartTime CHECK (EndTime>StartTime)
+  CONSTRAINT EndTimeAfterStartTime CHECK (EndTime>Start)
 )
 GO
 
@@ -745,6 +745,10 @@ BEGIN
 		BEGIN
 		;THROW 52000, 'Workshop booking with given WorkshopBookingID does not exist', 1
 		END
+
+		INSERT INTO WorkshopReservations(DayReservationID, WorkshopBookingID)
+		VALUES (@DayReservationID, @WorkshopBookingID)
+		
 	END TRY
 	BEGIN CATCH
 		DECLARE @errorMessage varchar(2048) = 'Failed to create workshopreservation. Error: ' + ERROR_MESSAGE();
