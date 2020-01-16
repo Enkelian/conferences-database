@@ -2119,6 +2119,51 @@ AS
 
 END
 GO
+
+--29 nowy
+CREATE TRIGGER [Trig_checkWorkshopBooking]
+ON WorkshopBookings
+AFTER INSERT
+AS
+	SET NOCOUNT ON
+	BEGIN
+	DECLARE @WorkshopID int = (SELECT WorkshopID FROM inserted)
+	DECLARE @DayBookingID int = (SELECT DayBookingID FROM inserted)
+	DECLARE @DayBookingStatus int = (
+			SELECT Status
+			FROM DayBookings
+			WHERE DayBookingID = @DayBookingID)
+	DECLARE @IsConferenceCancelled bit = (SELECT IsCancelled
+											FROM Conferences AS c
+											JOIN ConferenceBookings AS cb ON cb.ConferenceID = c.ConferenceID
+											JOIN DayBookings AS db ON db.ConferenceBookingID = cb.ConferenceBookingID
+											WHERE db.DayBookingID = @DayBookingID)
+	
+	IF @WorkshopID NOT IN (
+			SELECT WorkshopID
+			FROM Workshops)
+		BEGIN
+		;THROW 50001, 'Workshop with given WorkshopID does not exist', 1
+		END
+	IF @DayBookingID NOT IN(
+			SELECT DayBookingID
+			FROM DayBookings)
+		BEGIN
+		;THROW 50001, 'Booking with given DayBookingID does not exist', 1
+		END
+
+	IF(@DayBookingStatus = -1)
+		BEGIN
+		;THROW 50001, 'Day booking has been cancelled', 1
+		END
+	IF @IsConferenceCancelled = 1
+		BEGIN
+		;THROW 50001, 'This conference has been cancelled', 1
+		END
+
+END
+GO
+
 -- INDEKSY
 
 CREATE NONCLUSTERED INDEX [INDEX_workshopBookingsDayBookingID] ON [WorkshopBookings]
