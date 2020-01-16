@@ -2230,6 +2230,24 @@ AS
 END
 GO
 
+--33 nowy
+CREATE TRIGGER [Trig_checkPayment]
+ON Payments
+AFTER INSERT
+AS
+	SET NOCOUNT ON
+	BEGIN
+	DECLARE @ConferenceBookingID int = (SELECT ConferenceBookingID FROM inserted)
+	IF @ConferenceBookingID NOT IN (
+			SELECT ConferenceBookingID
+			FROM ConferenceBookings)
+		BEGIN
+		;THROW 50001, 'Conference booking with given ConferenceBookingID does not exist.', 1
+		END
+
+END
+GO
+
 -- INDEKSY
 
 CREATE NONCLUSTERED INDEX [INDEX_workshopBookingsDayBookingID] ON [WorkshopBookings]
