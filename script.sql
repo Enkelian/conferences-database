@@ -60,6 +60,8 @@ CREATE TABLE [Buildings] (
   [Name] nvarchar(255),
   [Phone] varchar(20)
   CONSTRAINT BuildingsPK PRIMARY KEY (BuildingID)
+  CONSTRAINT UniqueCityAddress UNIQUE (City, Address),
+
 )
 GO
 
