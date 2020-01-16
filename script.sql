@@ -2044,7 +2044,7 @@ END
 GO
 
 --27 nowy
-CREATE TRIGGER [Trig_checkconferenceBooking]
+CREATE TRIGGER [Trig_checkConferenceBooking]
 ON ConferenceBookings
 AFTER INSERT
 AS
@@ -2084,7 +2084,7 @@ END
 GO
 
 --28 nowy
-CREATE TRIGGER [Trig_dayBooking]
+CREATE TRIGGER [Trig_checkDayBooking]
 ON DayBookings
 AFTER INSERT
 AS
