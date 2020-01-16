@@ -27,6 +27,7 @@ CREATE TABLE [Employees] (
   [Email] nvarchar(50) NOT NULL CHECK (Email LIKE '%_@%._%'),
   [Password] varchar(128) NOT NULL
   CONSTRAINT EmployeesPK PRIMARY KEY (EmployeeID)
+  CONSTRAINT EmailUnique UNIQUE (Email)
 )
 GO
 
@@ -451,13 +452,6 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	BEGIN TRY
-
-		IF @Email IN (
-			SELECT Email
-			FROM Employees)
-		BEGIN 
-		;THROW 52000, 'This email address already exsists', 1
-		END
 
 		INSERT INTO Employees(Email, Password)
 		VALUES(@Email, @Password)
