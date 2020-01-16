@@ -6,7 +6,7 @@ CREATE TABLE [DayPrices] (
   [DayID] int NOT NULL,
   [Value] money NOT NULL,
   [ToDate] date NOT NULL,
-  [StudentDiscount] real NOT NULL CHECK (StudentDiscount>=0 AND StudentDiscount<=1)
+  [StudentDiscount] real NOT NULL CHECK (StudentDiscount>=0 AND StudentDiscount<=1),
   CONSTRAINT DayPricesPK PRIMARY KEY (PriceID)
 )
 GO
@@ -26,7 +26,7 @@ CREATE TABLE [Employees] (
   [EmployeeID] int NOT NULL IDENTITY,
   [Email] nvarchar(50) NOT NULL CHECK (Email LIKE '%_@%._%'),
   [Password] varchar(128) NOT NULL
-  CONSTRAINT EmployeesPK PRIMARY KEY (EmployeeID)
+  CONSTRAINT EmployeesPK PRIMARY KEY (EmployeeID),
   CONSTRAINT EmailUnique UNIQUE (Email)
 )
 GO
@@ -51,8 +51,8 @@ CREATE TABLE [Workshops] (
   [Price] money NOT NULL CHECK (Price >= 0),
   [Classroom] varchar(50) NOT NULL,
   [BuildingID] int NOT NULL
-  CONSTRAINT WorkshopsPK PRIMARY KEY (WorkshopID)
-  CONSTRAINT EndTimeAfterStartTime CHECK (EndTime>Start)
+  CONSTRAINT WorkshopsPK PRIMARY KEY (WorkshopID),
+  CONSTRAINT EndTimeAfterStartTime CHECK (EndTime>StartTime)
 )
 GO
 
@@ -95,7 +95,8 @@ CREATE TABLE [DayBookings] (
   [Status] int NOT NULL CHECK (Status = -1 OR Status = 0 OR Status = 1),
   [NumberOfParticipants] int NOT NULL CHECK (NumberOfParticipants > 0),
   [NumberOfStudents] int NOT NULL CHECK (NumberOfStudents >= 0)
-  CONSTRAINT DayBookingsPK PRIMARY KEY (DayBookingID)
+  CONSTRAINT DayBookingsPK PRIMARY KEY (DayBookingID),
+  CONSTRAINT LessStudentsThanParticipants CHECK (NumberOfStudents<=NumberOfParticipants)
 )
 GO
 
@@ -2192,8 +2193,8 @@ END
 GO
 
 --31 nowy
-CREATE TRIGGER [Trig_checkWorkshopReservation]
-ON WorkshopsReservations
+CREATE TRIGGER [TRIG_checkWorkshopReservation]
+ON WorkshopReservations
 AFTER INSERT
 AS
 	SET NOCOUNT ON
