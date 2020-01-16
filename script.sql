@@ -1914,6 +1914,38 @@ AS
 END
 GO
 
+--23 nowy trigger
+CREATE TRIGGER [Trig_checkDayPrices]
+ON DayPrices
+AFTER INSERT
+AS
+	BEGIN
+	SET NOCOUNT ON
+	IF NOT EXISTS(
+			SELECT d.DayID 
+			FROM Days AS d
+			JOIN inserted AS i ON i.DayID = d.DayID)
+		BEGIN
+		;THROW 50001, 'Day with given DayID does not exist.', 1
+		END
+	DECLARE @ConferenceID int = (
+			SELECT ConferenceID
+			FROM Days AS d
+			JOIN inserted AS i ON i.DayID = d.DayID)
+	DECLARE @ToDate date = (
+		SELECT ToDate FROM inserted)
+
+	IF(@ToDate < 
+			(SELECT StartDate
+			FROM Conferences
+			WHERE ConferenceID = @ConferenceID)
+			)
+		BEGIN
+		;THROW 50001, 'Date cannot follow conference start date', 1
+		END
+END
+GO
+
 -- INDEKSY
 
 CREATE NONCLUSTERED INDEX [INDEX_workshopBookingsDayBookingID] ON [WorkshopBookings]
