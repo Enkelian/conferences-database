@@ -2008,7 +2008,7 @@ END
 GO
 
 --26 nowy
-CREATE TRIGGER [Trig_checkBuilding]
+CREATE TRIGGER [Trig_checkEmployeesConferences]
 ON EmployeesConferences
 AFTER INSERT
 AS
