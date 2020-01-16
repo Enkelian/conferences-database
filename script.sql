@@ -52,6 +52,7 @@ CREATE TABLE [Workshops] (
   [Classroom] varchar(50) NOT NULL,
   [BuildingID] int NOT NULL
   CONSTRAINT WorkshopsPK PRIMARY KEY (WorkshopID)
+  CONSTRAINT EndTimeAfterStartTime CHECK (EndTime>StartTime)
 )
 GO
 
@@ -308,6 +309,11 @@ BEGIN
 			WHERE ConferenceID = @ConferenceID)
 		BEGIN
 		;THROW 52000, 'Conference with given ConferenceID does not exist.', 1
+		END
+
+		IF(@MaxParticipants <= 0)
+		BEGIN
+		;THROW 52000, 'Number of participants must be a positive number.',1
 		END
 
 		IF(@DayNumber IN(
@@ -2199,45 +2205,6 @@ AS
 			FROM WorkshopBookings)
 		BEGIN
 		;THROW 50001, 'Workshop booking with given WorkshopBookingID does not exist', 1
-		END
-
-END
-GO
-
---32 nowy
-CREATE TRIGGER [Trig_checkParticipant]
-ON Participants
-AFTER INSERT
-AS
-	SET NOCOUNT ON
-	BEGIN
-	DECLARE @ClientID int = (SELECT ClientID FROM inserted)
-	DECLARE @IsPerson bit = (SELECT IsPerson FROM Clients AS cl
-							JOIN inserted AS i ON i.ClientID = cl.ClientID)
-	IF @IsPerson = 1 AND
-			((SELECT COUNT(ParticipantID)
-			FROM Participants
-			WHERE ClientID = @ClientID) > 1)
-		BEGIN
-		;THROW 50001, 'Individual client can have only one participant', 1
-		END
-
-END
-GO
-
---33 nowy
-CREATE TRIGGER [Trig_checkPayment]
-ON Payments
-AFTER INSERT
-AS
-	SET NOCOUNT ON
-	BEGIN
-	DECLARE @ConferenceBookingID int = (SELECT ConferenceBookingID FROM inserted)
-	IF @ConferenceBookingID NOT IN (
-			SELECT ConferenceBookingID
-			FROM ConferenceBookings)
-		BEGIN
-		;THROW 50001, 'Conference booking with given ConferenceBookingID does not exist.', 1
 		END
 
 END
