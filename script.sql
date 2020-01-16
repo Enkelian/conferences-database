@@ -1954,7 +1954,7 @@ AS
 	BEGIN
 	SET NOCOUNT ON
 	IF NOT EXISTS (
-			SELECT ConferenceID
+			SELECT c.ConferenceID
 			FROM Conferences AS c
 			JOIN inserted AS i ON i.ConferenceID = c.ConferenceID)
 		BEGIN
@@ -1992,6 +1992,39 @@ AS
 
 END
 GO
+
+--25 nowy
+CREATE TRIGGER [Trig_checkDay]
+ON Workshops
+AFTER INSERT
+AS
+	BEGIN
+	SET NOCOUNT ON
+	DECLARE @isConferenceCancelled bit = (
+		SELECT c.IsCancelled FROM Days AS d
+		JOIN inserted AS i ON i.DayID = d.DayID
+		JOIN Conferences AS c ON c.ConferenceID = d.ConferenceID)
+	IF NOT EXISTS(
+		SELECT Days.DayID 
+		FROM Days
+		JOIN inserted AS i ON i.DayID = Days.DayID)
+		BEGIN
+		;THROW 52000, 'Day with given DayID does not exist.', 1
+		END
+	IF NOT EXISTS(
+			SELECT b.BuildingID
+			FROM Buildings AS b
+			JOIN inserted AS i ON i.BuildingID = b.BuildingID)
+		BEGIN
+		;THROW 52000, 'Building with given BuildingID does not exist.', 1
+		END
+	IF (@isConferenceCancelled = 1)
+		BEGIN
+		;THROW 52000, 'Cannot add workshop to cancelled conference.', 1
+		END
+END
+GO
+
 
 -- INDEKSY
 
