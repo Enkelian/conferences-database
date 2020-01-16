@@ -441,13 +441,6 @@ BEGIN
 	SET NOCOUNT ON
 	BEGIN TRY
 		
-		IF @Address IN (
-			SELECT Address
-			FROM Buildings)
-		BEGIN
-		;THROW 52000, 'Building with that address already exists', 1
-		END
-
 		INSERT INTO Buildings(City, Address, Name, Phone)
 		VALUES(@City, @Address, @Name, @Phone)
 		
