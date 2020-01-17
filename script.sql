@@ -2238,7 +2238,7 @@ END
 GO
 
 --32 nowy
-CREATE TRIGGER [TRIG_checkParticipants]
+CREATE TRIGGER [TRIG_checkParticipant]
 ON Participants
 AFTER INSERT
 AS
