@@ -1226,7 +1226,7 @@ BEGIN
 	DECLARE @NumberOfReservations int = (SELECT COUNT(p.ParticipantID)
 										FROM DayReservations [dr]
 										JOIN Participants [p] ON dr.ParticipantID = p.ParticipantID
-										WHERE DayBookingID =  @DayBookingID AND (p.StudentCard IS NULL OR DATEDIFF (year,  @DayBookingID, p.BirthDate) > 25))
+										WHERE DayBookingID =  @DayBookingID AND (p.StudentCard IS NULL OR DATEDIFF (year,  @ConferenceDate, p.BirthDate) > 25))
 
 	RETURN (SELECT NumberOfParticipants - NumberOfStudents - @NumberOfReservations
 			FROM DayBookings
