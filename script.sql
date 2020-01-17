@@ -50,7 +50,7 @@ CREATE TABLE [Workshops] (
   [StartTime] time(7) NOT NULL,
   [EndTime] time(7) NOT NULL,
   [Price] money NOT NULL CHECK (Price >= 0),
-  [Classroom] varchar(50) NOT NULL,
+  [Classroom] int NOT NULL,
   [BuildingID] int NOT NULL
   CONSTRAINT WorkshopsPK PRIMARY KEY (WorkshopID),
   CONSTRAINT EndTimeAfterStartTime CHECK (EndTime>StartTime)
@@ -377,7 +377,7 @@ CREATE PROCEDURE [PROC_addWorkshop]
 @StartTime time,
 @EndTime time,
 @Price money,
-@Classroom varchar(50),
+@Classroom int,
 @BuildingID int
 AS
 BEGIN
