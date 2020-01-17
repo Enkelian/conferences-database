@@ -1939,7 +1939,7 @@ AS
 		SELECT ToDate FROM inserted)
 	DECLARE @CurrentPrice money = (SELECT Value FROM inserted)
 
-	IF(@ToDate < 
+	IF(@ToDate > 
 			(SELECT StartDate
 			FROM Conferences
 			WHERE ConferenceID = @ConferenceID)
