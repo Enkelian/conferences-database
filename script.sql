@@ -1761,12 +1761,12 @@ AS
 		JOIN Conferences AS c ON c.ConferenceID = d.ConferenceID
 		WHERE (
 				p.StudentCard IS NOT NULL AND DATEDIFF (year, c.StartDate, p.BirthDate) <= 25
-				AND dbo.FUNC_bookingDayFreeStudentsPlaces(i.DayBookingID) <= 0
+				AND dbo.FUNC_bookingDayFreeStudentsPlaces(i.DayBookingID) < 0
 				)
 				OR
 				(
 				((p.StudentCard IS NULL) OR (p.StudentCard IS NOT NULL AND DATEDIFF (year, c.StartDate, p.BirthDate) > 25))
-				AND dbo.FUNC_bookingDayFreeNormalPlaces(i.DayBookingID) <= 0
+				AND dbo.FUNC_bookingDayFreeNormalPlaces(i.DayBookingID) < 0
 				)
 	)
 	BEGIN
