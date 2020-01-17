@@ -723,7 +723,7 @@ BEGIN
 		BEGIN
 		;THROW 52000, 'Day booking with given DayBookingID does not exist', 1
 		END*/
-
+	
 		INSERT INTO DayReservations(ParticipantID, DayBookingID)
 		VALUES(@ParticipantID, @DayBookingID)
 
