@@ -1783,29 +1783,6 @@ AS
 END
 GO
 
---17
-CREATE TRIGGER [ TRIG_collidingWorkshops ]
-ON WorkshopReservations
-AFTER INSERT
-AS
-	BEGIN
-	SET NOCOUNT ON;
-	IF EXISTS
-	(
-		SELECT * FROM inserted AS i
-		JOIN DayReservations AS dr ON dr.DayReservationID = i.DayReservationID
-		CROSS APPLY FUNC_workshopsListForParticipant(dr.ParticipantID) AS w1
-		JOIN WorkshopBookings AS wb ON wb.WorkshopBookingID = i.WorkshopBookingID
-		JOIN Workshops AS w ON w.WorkshopID = wb.WorkshopID
-		WHERE dbo.FUNC_doWorkshopsCollide(w1.WorkshopID , w.WorkshopID) = 1
-		AND w1.WorkshopID <> w.WorkshopID
-	)
-	BEGIN
-	;THROW 50001, 'Tried to book place for workshop when you already booked another workshop in the same time.',1
-	END
-END
-GO
-
 --18
 CREATE TRIGGER [ TRIG_reservationForDay ]
 ON DayReservations
@@ -1832,25 +1809,6 @@ AS
 	)
 	BEGIN
 	;THROW 50001, 'There are no more places that the client has booked. ',1
-	END
-END
-GO
-
-
---19
-CREATE TRIGGER [ TRIG_reservationForWorkshop]
-ON WorkshopReservations
-AFTER INSERT
-AS
-	BEGIN
-	SET NOCOUNT ON;
-	IF EXISTS
-	(
-		SELECT * FROM inserted AS i
-		WHERE dbo.FUNC_workshopDayFreeNormalPlaces(i.WorkshopBookingID) <= 0
-	)
-	BEGIN
-	;THROW 50001, 'There are no more places that the client has booked.',1
 	END
 END
 GO
@@ -2237,13 +2195,33 @@ AS
 		;THROW 50001, 'Day reservation with given DayReservationID does not exist', 1
 		END
 
-		IF @WorkshopBookingID NOT IN (
+	IF @WorkshopBookingID NOT IN (
 			SELECT WorkshopBookingID
 			FROM WorkshopBookings)
 		BEGIN
 		;THROW 50001, 'Workshop booking with given WorkshopBookingID does not exist', 1
 		END
-
+	IF EXISTS
+		(
+			SELECT * FROM inserted AS i
+			JOIN DayReservations AS dr ON dr.DayReservationID = i.DayReservationID
+			CROSS APPLY FUNC_workshopsListForParticipant(dr.ParticipantID) AS w1
+			JOIN WorkshopBookings AS wb ON wb.WorkshopBookingID = i.WorkshopBookingID
+			JOIN Workshops AS w ON w.WorkshopID = wb.WorkshopID
+			WHERE dbo.FUNC_doWorkshopsCollide(w1.WorkshopID , w.WorkshopID) = 1
+			AND w1.WorkshopID <> w.WorkshopID
+		)
+		BEGIN
+		;THROW 50001, 'Tried to book place for workshop when you already booked another workshop in the same time.',1
+		END
+	IF EXISTS
+	(
+		SELECT * FROM inserted AS i
+		WHERE dbo.FUNC_workshopDayFreeNormalPlaces(i.WorkshopBookingID) <= 0
+	)
+		BEGIN
+		;THROW 50001, 'There are no more places that the client has booked.',1
+		END
 END
 GO
 
