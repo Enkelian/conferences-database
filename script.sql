@@ -2261,6 +2261,23 @@ AS
 END
 GO
 
+--33 nowy
+CREATE TRIGGER [ TRIG_cancelConferenceBookingsAfterCancellingConference ]
+ON Conferences
+AFTER UPDATE
+AS
+	BEGIN
+	SET NOCOUNT ON;
+	UPDATE ConferenceBookings SET Status = -1
+	WHERE ConferenceID IN 
+	(
+		SELECT i.ConferenceID FROM inserted AS i
+		JOIN deleted AS d ON i.ConferenceID = d.ConferenceID
+		WHERE i.IsCancelled = 1 AND d.IsCancelled = 0
+	)
+END
+GO
+
 -- INDEKSY
 
 CREATE NONCLUSTERED INDEX [INDEX_workshopBookingsDayBookingID] ON [WorkshopBookings]
