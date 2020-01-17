@@ -1943,7 +1943,7 @@ AS
 											JOIN Days AS d ON d.DayID = dp.DayID
 											WHERE d.ConferenceID = @ConferenceID AND @ToDate > dp.ToDate
 											ORDER BY dp.ToDate DESC), 0);
-	DECLARE @NetPrice money = ISNULL ( (SELECT TOP 1 dp.Value
+	DECLARE @NextPrice money = ISNULL ( (SELECT TOP 1 dp.Value
 										FROM DayPrices AS dp
 										JOIN Days AS d ON d.DayID = dp.DayID
 										WHERE d.ConferenceID = @ConferenceID AND @ToDate < dp.ToDate
