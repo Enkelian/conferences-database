@@ -7,7 +7,8 @@ CREATE TABLE [DayPrices] (
   [Value] money NOT NULL,
   [ToDate] date NOT NULL,
   [StudentDiscount] real NOT NULL CHECK (StudentDiscount>=0 AND StudentDiscount<=1),
-  CONSTRAINT DayPricesPK PRIMARY KEY (PriceID)
+  CONSTRAINT DayPricesPK PRIMARY KEY (PriceID),
+  CONSTRAINT UniqueDayIDToDate UNIQUE (DayID, ToDate)
 )
 GO
 
