@@ -458,8 +458,8 @@ END
 GO
 
 CREATE PROCEDURE [PROC_addEmployee]
-@Email varchar,
-@Password varchar
+@Email varchar(50),
+@Password varchar(128)
 AS
 BEGIN
 	SET NOCOUNT ON
