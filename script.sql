@@ -1948,7 +1948,7 @@ AS
 										JOIN Days AS d ON d.DayID = dp.DayID
 										WHERE d.ConferenceID = @ConferenceID AND @ToDate < dp.ToDate
 										ORDER BY dp.ToDate ASC), 0)
-	IF (@PreviousPrice >= @CurrentPrice OR @CurrentPrice >= @NextPrice)
+	IF (@PreviousPrice >= @CurrentPrice OR (@NextPrice != 0 AND @CurrentPrice >= @NextPrice))
 		BEGIN
 		; THROW 50001, 'Price not in correct order with other ones.',1
 		END
