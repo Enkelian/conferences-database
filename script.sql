@@ -2264,6 +2264,28 @@ AS
 END
 GO
 
+--30 nowy
+CREATE TRIGGER [ TRIG_checkWorkshopClassroom ]
+ON Workshops
+AFTER INSERT
+AS
+	BEGIN
+	SET NOCOUNT ON;
+	DECLARE @WorkshopID int = (SELECT WorkshopID FROM inserted)
+	DECLARE @Classroom varchar = (SELECT Classroom FROM inserted)
+	DECLARE @BuildingID int = (SELECT BuildingID FROM inserted)
+
+	IF EXISTS (SELECT w.WorkshopID
+				FROM Workshops AS w
+				WHERE dbo.FUNC_doWorkshopsCollide(@WorkshopID , w.WorkshopID) = 1 AND @WorkshopID != w.WorkshopID 
+				AND w.Classroom = @Classroom AND w.BuildingID = @BuildingID)
+		BEGIN
+		; THROW 50001, 'Cannot add workshop in this classroom because there is another workshop there in that time.',1
+		END
+	
+END
+GO
+
 -- INDEKSY
 
 CREATE NONCLUSTERED INDEX [INDEX_workshopBookingsDayBookingID] ON [WorkshopBookings]
