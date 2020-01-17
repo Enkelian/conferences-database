@@ -1746,25 +1746,6 @@ AS
 END
 GO
 
---16
-CREATE TRIGGER [ TRIG_dayOutsideConferenceDuration ]
-ON Days
-AFTER INSERT
-AS
-	BEGIN
-	SET NOCOUNT ON;
-	IF EXISTS
-	(
-		SELECT * FROM inserted AS i
-		JOIN Conferences AS c ON c.ConferenceID = i.ConferenceID
-		WHERE DATEADD(day, i.DayNumber - 1, c.StartDate) > c.EndDate
-	)
-	BEGIN
-	;THROW 50001, 'Day is outside of conference duration.',1
-	END
-END
-GO
-
 --18
 CREATE TRIGGER [ TRIG_reservationForDay ]
 ON DayReservations
@@ -1925,7 +1906,16 @@ AS
 	IF (@isConferenceCancelled = 1)
 		BEGIN
 		;THROW 50001, 'Cannot add day to cancelled conference.', 1
-		END				
+		END	
+	IF EXISTS
+	(
+		SELECT * FROM inserted AS i
+		JOIN Conferences AS c ON c.ConferenceID = i.ConferenceID
+		WHERE DATEADD(day, i.DayNumber - 1, c.StartDate) > c.EndDate
+	)
+	BEGIN
+	;THROW 50001, 'Day is outside of conference duration.',1
+	END			
 
 END
 GO
