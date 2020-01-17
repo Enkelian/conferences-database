@@ -2093,11 +2093,12 @@ AS
 	IF EXISTS
 	(
 		SELECT * FROM inserted AS i
-		WHERE dbo.FUNC_vacanciesForWorkshop (i.WorkshopID ) - i.NumberOfParticipants < 0
+		WHERE dbo.FUNC_vacanciesForWorkshop (i.WorkshopID ) < 0
 	)
 	BEGIN
 	;THROW 50001 , 'Too few free places to book workshop.' ,1
 	END
+
 
 	IF @WorkshopID NOT IN (
 			SELECT WorkshopID
