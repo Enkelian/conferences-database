@@ -1505,8 +1505,7 @@ AS
 END
 GO
 
---3
-
+--2
 CREATE TRIGGER [ TRIG_morePlacesBookedForWorkshopThanDay ]
 ON WorkshopBookings
 AFTER INSERT, UPDATE
@@ -1525,7 +1524,7 @@ AS
 END
 GO
 
---4
+--3
 CREATE TRIGGER [ TRIG_moreBookedPlacesThanDayMaxParticipants ]
 ON Days
 AFTER UPDATE
@@ -1545,7 +1544,7 @@ AS
 END
 GO
 
---5
+--4
 CREATE TRIGGER [ TRIG_moreBookedPlacesThanWorkshopMaxParticipants ]
 ON Workshops
 AFTER UPDATE
@@ -1565,7 +1564,7 @@ AS
 END
 GO
 
---6
+--5
 CREATE TRIGGER [ TRIG_cancelDayBookingAfterCancellingConferenceBooking ]
 ON ConferenceBookings
 AFTER UPDATE
@@ -1582,7 +1581,7 @@ AS
 END
 GO
 
---7
+--6
 CREATE TRIGGER [ TRIG_bookingDayTwice ]
 ON DayBookings
 AFTER INSERT
@@ -1600,7 +1599,7 @@ AS
 	END
 END
 GO
---8
+--7
 CREATE TRIGGER [ TRIG_bookingWorkshopInWrongDay ]
 ON WorkshopBookings
 AFTER INSERT
@@ -1622,7 +1621,7 @@ AS
 END
 GO
 
---9
+--8
 CREATE TRIGGER [ TRIG_cancelWorkshopBookingAfterCancellingDayBooking ]
 ON DayBookings
 AFTER UPDATE
@@ -1639,7 +1638,7 @@ AS
 END
 GO
 
---10
+--9
 CREATE TRIGGER [ TRIG_removeWorkshopReservation ]
 ON DayReservations
 AFTER DELETE
@@ -1656,7 +1655,7 @@ AS
 END
 GO
 
---11
+--10
 CREATE TRIGGER [ TRIG_confirmConferenceBookingPayment ]
 ON Payments
 AFTER INSERT
@@ -1674,7 +1673,7 @@ AS
 END
 GO
 
---12
+--11
 CREATE TRIGGER [ TRIG_confirmDayBookingPaymentAfterConfirmingConferenceBooking ]
 ON ConferenceBookings
 AFTER UPDATE
@@ -1691,7 +1690,7 @@ AS
 END
 GO
 
---13
+--12
 CREATE TRIGGER [ TRIG_confirmWorkshopBookingPaymentAfterConfirmingDayBooking ]
 ON DayBookings
 AFTER UPDATE
@@ -1708,7 +1707,7 @@ AS
 END
 GO
 
---14
+--13
 CREATE TRIGGER [ TRIG_deleteDayReservationAfterCancellingDayBooking ]
 ON DayBookings
 AFTER UPDATE
@@ -1727,7 +1726,7 @@ AS
 END
 GO
 
---15
+--14
 CREATE TRIGGER [ TRIG_deleteWorkshopReservationAfterCancellingWorkshopBooking ]
 ON WorkshopBookings
 AFTER UPDATE
@@ -1746,7 +1745,7 @@ AS
 END
 GO
 
---18
+--15
 CREATE TRIGGER [ TRIG_reservationForDay ]
 ON DayReservations
 AFTER INSERT
@@ -1776,7 +1775,7 @@ AS
 END
 GO
 
---20
+--16
 CREATE TRIGGER [ TRIG_tooManyWorkshopReservationsAfterDecrasingPlaces]
 ON WorkshopBookings
 AFTER UPDATE
@@ -1794,7 +1793,7 @@ AS
 END
 GO
 
---21
+--17
 CREATE TRIGGER [ TRIG_tooManyDayReservationsAfterDecrasingPlaces]
 ON DayBookings
 AFTER UPDATE
@@ -1813,7 +1812,7 @@ AS
 END
 GO
 
---23 nowy trigger
+--18 nowy trigger
 CREATE TRIGGER [TRIG_checkDayPrices]
 ON DayPrices
 AFTER INSERT
@@ -1864,7 +1863,7 @@ AS
 END
 GO
 
---24 nowy
+--19 nowy
 CREATE TRIGGER [TRIG_checkDay]
 ON Days
 AFTER INSERT
@@ -1920,7 +1919,7 @@ AS
 END
 GO
 
---25 nowy
+--20 nowy
 CREATE TRIGGER [TRIG_checkWorkshop]
 ON Workshops
 AFTER INSERT
@@ -1952,7 +1951,7 @@ AS
 END
 GO
 
---26 nowy
+--21 nowy
 CREATE TRIGGER [TRIG_checkEmployeesConferences]
 ON EmployeesConferences
 AFTER INSERT
@@ -1978,7 +1977,7 @@ AS
 END
 GO
 
---27 nowy
+--22 nowy
 CREATE TRIGGER [TRIG_checkConferenceBooking]
 ON ConferenceBookings
 AFTER INSERT
@@ -2018,7 +2017,7 @@ AS
 END
 GO
 
---28 nowy
+--23 nowy
 CREATE TRIGGER [TRIG_checkDayBooking]
 ON DayBookings
 AFTER INSERT
@@ -2072,7 +2071,7 @@ AS
 END
 GO
 
---29 nowy
+--24 nowy
 CREATE TRIGGER [TRIG_checkWorkshopBooking]
 ON WorkshopBookings
 AFTER INSERT
@@ -2125,7 +2124,7 @@ AS
 END
 GO
 
---30 nowy
+--25 nowy
 CREATE TRIGGER [TRIG_checkDayReservation]
 ON DayReservations
 AFTER INSERT
@@ -2150,7 +2149,7 @@ AS
 END
 GO
 
---31 nowy
+--26 nowy
 CREATE TRIGGER [TRIG_checkWorkshopReservation]
 ON WorkshopReservations
 AFTER INSERT
@@ -2196,7 +2195,7 @@ AS
 END
 GO
 
---32 nowy
+--27 nowy
 CREATE TRIGGER [TRIG_checkParticipant]
 ON Participants
 AFTER INSERT
@@ -2220,7 +2219,7 @@ AS
 END
 GO
 
---33 nowy
+--28 nowy
 CREATE TRIGGER [ TRIG_cancelConferenceBookingsAfterCancellingConference ]
 ON Conferences
 AFTER UPDATE
@@ -2237,7 +2236,7 @@ AS
 END
 GO
 
---34 nowy
+--29 nowy
 CREATE TRIGGER [ TRIG_checkPayment ]
 ON Payments
 AFTER INSERT
