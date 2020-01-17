@@ -1497,7 +1497,7 @@ AS
 	IF EXISTS
 	(
 		SELECT * FROM inserted AS i
-		WHERE dbo.FUNC_vacanciesForDay (i.DayID ) - i.NumberOfParticipants < 0
+		WHERE dbo.FUNC_vacanciesForDay (i.DayID ) < 0
 	)
 	BEGIN
 	;THROW 50001, 'Too few free places to book day.' ,1
