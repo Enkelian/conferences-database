@@ -461,7 +461,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		DECLARE @errorMessage varchar(2048) = 'Failed to add employee. Error: ' + ERROR_MESSAGE();
-		;THROW 25000, @errorMessage, 1
+		;THROW 52000, @errorMessage, 1
 	END CATCH
 END
 GO
