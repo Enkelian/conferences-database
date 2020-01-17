@@ -1957,7 +1957,7 @@ AS
 										JOIN Days AS d ON d.DayID = dp.DayID
 										WHERE d.ConferenceID = @ConferenceID AND @ToDate < dp.ToDate
 										ORDER BY dp.ToDate ASC), 0)
-	IF (@PreviousPrice >= @CurrentPrice OR @CurrentPrice >= @NextPrice)
+	IF (@PreviousPrice >= @CurrentPrice OR (@NextPrice != 0 AND @CurrentPrice >= @NextPrice))
 		BEGIN
 		; THROW 50001, 'Price not in correct order with other ones.',1
 		END
@@ -2267,6 +2267,23 @@ AS
 		BEGIN
 		;THROW 50001, 'Individual client can have only one participant', 1
 		END
+END
+GO
+
+--33 nowy
+CREATE TRIGGER [ TRIG_cancelConferenceBookingsAfterCancellingConference ]
+ON Conferences
+AFTER UPDATE
+AS
+	BEGIN
+	SET NOCOUNT ON;
+	UPDATE ConferenceBookings SET Status = -1
+	WHERE ConferenceID IN 
+	(
+		SELECT i.ConferenceID FROM inserted AS i
+		JOIN deleted AS d ON i.ConferenceID = d.ConferenceID
+		WHERE i.IsCancelled = 1 AND d.IsCancelled = 0
+	)
 END
 GO
 
