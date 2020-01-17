@@ -1505,24 +1505,6 @@ AS
 END
 GO
 
---2
-CREATE TRIGGER [ TRIG_notEnoughFreePlacesForBookingWorkshop ]
-ON WorkshopBookings
-AFTER INSERT
-AS
-	BEGIN
-	SET NOCOUNT ON;
-	IF EXISTS
-	(
-		SELECT * FROM inserted AS i
-		WHERE dbo.FUNC_vacanciesForWorkshop (i.WorkshopID ) - i.NumberOfParticipants < 0
-	)
-	BEGIN
-	;THROW 50001 , 'Too few free places to book workshop.' ,1
-	END
-END
-GO
-
 --3
 
 CREATE TRIGGER [ TRIG_morePlacesBookedForWorkshopThanDay ]
@@ -1850,28 +1832,6 @@ AS
 END
 GO
 
---22
-CREATE TRIGGER [ TRIG_bookingDayFromWrongConference]
-ON DayBookings
-AFTER INSERT
-AS
-	BEGIN
-	SET NOCOUNT ON;
-	IF EXISTS
-	(
-		SELECT * FROM inserted AS i
-		JOIN Days AS d ON d.DayID = i.DayID
-		JOIN Conferences AS c1 ON c1.ConferenceID = d.ConferenceID
-		JOIN ConferenceBookings AS cb ON cb.ConferenceBookingID = i.ConferenceBookingID
-		JOIN Conferences AS c2 ON c2.ConferenceID = cb.ConferenceID
-		WHERE c1.ConferenceID != c2.ConferenceID
-	)
-	BEGIN
-	;THROW 50001, 'Booking day from wrong conference.',1
-	END
-END
-GO
-
 --23 nowy trigger
 CREATE TRIGGER [TRIG_checkDayPrices]
 ON DayPrices
@@ -2106,6 +2066,18 @@ AS
 		BEGIN
 		;THROW 50001, 'This conference has been cancelled', 1
 		END
+	IF EXISTS
+	(
+		SELECT * FROM inserted AS i
+		JOIN Days AS d ON d.DayID = i.DayID
+		JOIN Conferences AS c1 ON c1.ConferenceID = d.ConferenceID
+		JOIN ConferenceBookings AS cb ON cb.ConferenceBookingID = i.ConferenceBookingID
+		JOIN Conferences AS c2 ON c2.ConferenceID = cb.ConferenceID
+		WHERE c1.ConferenceID != c2.ConferenceID
+	)
+	BEGIN
+	;THROW 50001, 'Booking day from wrong conference.',1
+	END
 
 END
 GO
@@ -2129,6 +2101,15 @@ AS
 											JOIN DayBookings AS db ON db.ConferenceBookingID = cb.ConferenceBookingID
 											WHERE db.DayBookingID = @DayBookingID)
 	
+	IF EXISTS
+	(
+		SELECT * FROM inserted AS i
+		WHERE dbo.FUNC_vacanciesForWorkshop (i.WorkshopID ) - i.NumberOfParticipants < 0
+	)
+	BEGIN
+	;THROW 50001 , 'Too few free places to book workshop.' ,1
+	END
+
 	IF @WorkshopID NOT IN (
 			SELECT WorkshopID
 			FROM Workshops)
