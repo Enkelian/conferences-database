@@ -1911,6 +1911,10 @@ AFTER INSERT
 AS
 	BEGIN
 	SET NOCOUNT ON
+	IF (SELECT COUNT(*) FROM inserted) > 1
+		BEGIN
+		;THROW 50001, 'You should insert only one price in single statement',1
+		END
 	IF NOT EXISTS(
 			SELECT d.DayID 
 			FROM Days AS d
@@ -1924,6 +1928,7 @@ AS
 			JOIN inserted AS i ON i.DayID = d.DayID)
 	DECLARE @ToDate date = (
 		SELECT ToDate FROM inserted)
+	DECLARE @CurrentPrice money = (SELECT Value FROM inserted)
 
 	IF(@ToDate < 
 			(SELECT StartDate
@@ -1932,6 +1937,20 @@ AS
 			)
 		BEGIN
 		;THROW 50001, 'Date cannot follow conference start date', 1
+		END
+	DECLARE @PreviousPrice money = ISNULL ( (SELECT TOP 1 dp.Value
+											FROM DayPrices AS dp
+											JOIN Days AS d ON d.DayID = dp.DayID
+											WHERE d.ConferenceID = @ConferenceID AND @ToDate > dp.ToDate
+											ORDER BY dp.ToDate DESC), 0);
+	DECLARE @NetPrice money = ISNULL ( (SELECT TOP 1 dp.Value
+										FROM DayPrices AS dp
+										JOIN Days AS d ON d.DayID = dp.DayID
+										WHERE d.ConferenceID = @ConferenceID AND @ToDate < dp.ToDate
+										ORDER BY dp.ToDate ASC), 0)
+	IF (@PreviousPrice >= @CurrentPrice OR @CurrentPrice >= @NextPrice)
+		BEGIN
+		; THROW 50001, 'Price not in correct order with other ones.',1
 		END
 END
 GO
@@ -2217,6 +2236,8 @@ AS
 
 END
 GO
+
+--32 now
 
 -- INDEKSY
 
