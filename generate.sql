@@ -1,5 +1,4 @@
-USE test45
-
+USE test60
 /*
 EXEC PROC_addConference @Name = 'sadasdas',                -- varchar(1)
                             @StartDate = '2020-01-17', -- date
@@ -56,7 +55,7 @@ EXEC dbo.PROC_addWorkshop @DayID = 1,              -- int
                           @StartTime = '16:28:29', -- time(7)
                           @EndTime = '16:28:50',   -- time(7)
                           @Price = 34,           -- money
-                          @Classroom = 'dsa',         -- varchar(1)
+                          @Classroom = 1,         -- varchar(1)
                           @BuildingID = 1          -- int
 
 EXEC dbo.PROC_addEmployee @Email = 'dsadasdsa@sadsd.com',   -- varchar(1)
@@ -78,9 +77,9 @@ EXEC dbo.PROC_addDayBooking @DayID = 1,                -- int
                             @NumberOfStudents = 1      -- int			
 
 
-*/
 
-/*
+
+
 EXEC dbo.PROC_addWorkshopBooking @WorkshopID = 1,          -- int
                                  @DayBookingID = 1,        -- int
                                  @NumberOfParticipants = 1 -- int
@@ -101,29 +100,37 @@ EXEC dbo.PROC_addDayReservation @ParticipantID = 1, -- int
 EXEC dbo.PROC_addWorkshopReservation @DayReservationID = 1, -- int
                                      @WorkshopBookingID = 1 -- int
 
-
-*/
-
-
-/*
+		*/ /*
 EXEC dbo.PROC_addWorkshop @DayID = 1,              -- int
                           @Title = 'fdsf',             -- varchar(1)
                           @MaxParticipants = 2,    -- int
-                          @StartTime = '19:28:29', -- time(7)
-                          @EndTime = '20:28:32',   -- time(7)
+                          @StartTime = '9:30:29', -- time(7)
+                          @EndTime = '10:28:32',   -- time(7)
                           @Price = 0,           -- money
-                          @Classroom = 'df',         -- varchar(1)
+                          @Classroom = 1,         -- varchar(1)
                           @BuildingID = 1          -- int
-						  
 						  */
-						  					  SELECT * FROM dbo.Workshops
-						  SELECT dbo.FUNC_doWorkshopsCollide(2, 3)
+
+						  SELECT * FROM dbo.Workshops
+
+						  
+						  
+SELECT * FROM dbo.Workshops
+SELECT COUNT(w.WorkshopID)
+		FROM Workshops AS w
+		WHERE dbo.FUNC_doWorkshopsCollide(2 , w.WorkshopID) = 1
+		AND w.Classroom = 'df' AND w.BuildingID = 1 			
+										  
+/*											  
+SELECT * FROM dbo.Workshops
+SELECT dbo.FUNC_doWorkshopsCollide(2, 3)
 						 
 						 
 SELECT w.WorkshopID
 				FROM Workshops AS w
 				WHERE dbo.FUNC_doWorkshopsCollide(2 , w.WorkshopID) = 1 AND 2 != w.WorkshopID 
 				AND w.Classroom = 'df' AND w.BuildingID = 1
+				*/
 				
 /*
 

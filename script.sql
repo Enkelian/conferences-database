@@ -1163,11 +1163,11 @@ CREATE FUNCTION [FUNC_workshopStartDatetime]
 (
 	@WorkshopID int
 )
-RETURNS date
+RETURNS datetime
 AS
 BEGIN
 	RETURN(
-		SELECT CAST(StartTime AS datetime) +CAST(dbo.FUNC_WorkshopDate(@WorkshopID) AS datetime)
+		SELECT CAST(StartTime AS datetime) + CAST(dbo.FUNC_WorkshopDate(@WorkshopID) AS datetime)
 		FROM Workshops
 		WHERE WorkshopID = @WorkshopID);
 END
@@ -1177,7 +1177,7 @@ CREATE FUNCTION [FUNC_workshopEndDatetime]
 (
 	@WorkshopID int
 )
-RETURNS date
+RETURNS datetime
 AS
 BEGIN
 	RETURN(
