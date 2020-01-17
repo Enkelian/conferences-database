@@ -1505,24 +1505,6 @@ AS
 END
 GO
 
---2
-CREATE TRIGGER [ TRIG_notEnoughFreePlacesForBookingWorkshop ]
-ON WorkshopBookings
-AFTER INSERT
-AS
-	BEGIN
-	SET NOCOUNT ON;
-	IF EXISTS
-	(
-		SELECT * FROM inserted AS i
-		WHERE dbo.FUNC_vacanciesForWorkshop (i.WorkshopID ) - i.NumberOfParticipants < 0
-	)
-	BEGIN
-	;THROW 50001 , 'Too few free places to book workshop.' ,1
-	END
-END
-GO
-
 --3
 
 CREATE TRIGGER [ TRIG_morePlacesBookedForWorkshopThanDay ]
@@ -2129,6 +2111,15 @@ AS
 											JOIN DayBookings AS db ON db.ConferenceBookingID = cb.ConferenceBookingID
 											WHERE db.DayBookingID = @DayBookingID)
 	
+	IF EXISTS
+	(
+		SELECT * FROM inserted AS i
+		WHERE dbo.FUNC_vacanciesForWorkshop (i.WorkshopID ) - i.NumberOfParticipants < 0
+	)
+	BEGIN
+	;THROW 50001 , 'Too few free places to book workshop.' ,1
+	END
+
 	IF @WorkshopID NOT IN (
 			SELECT WorkshopID
 			FROM Workshops)
