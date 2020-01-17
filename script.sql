@@ -2237,7 +2237,29 @@ AS
 END
 GO
 
---32 now
+--32 nowy
+CREATE TRIGGER [TRIG_checkParticipants]
+ON Participants
+AFTER INSERT
+AS
+	SET NOCOUNT ON
+	BEGIN
+	DECLARE @ClientID int = (SELECT ClientID FROM inserted)
+	DECLARE @IsPerson bit = (SELECT IsPerson FROM inserted AS i
+							JOIN Clients AS c ON c.ClientID = i.ClientID)
+	IF NOT EXISTS (SELECT ClientID FROM Clients WHERE ClientID = @ClientID)
+		BEGIN
+		; THROW 50001, 'Client with that ID does not exist', 1
+		END
+	IF @IsPerson = 1 AND
+			((SELECT COUNT(ParticipantID)
+			FROM Participants
+			WHERE ClientID = @ClientID) > 1)
+		BEGIN
+		;THROW 50001, 'Individual client can have only one participant', 1
+		END
+END
+GO
 
 -- INDEKSY
 
