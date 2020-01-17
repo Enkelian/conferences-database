@@ -1217,10 +1217,16 @@ CREATE FUNCTION [FUNC_bookingDayFreeNormalPlaces]
 RETURNS int
 AS
 BEGIN
+	DECLARE @ConferenceDate date = (SELECT StartDate
+									FROM Conferences [c]
+									JOIN ConferenceBookings [cb] ON c.ConferenceID = cb.ConferenceID
+									JOIN DayBookings [db] ON db.ConferenceBookingID = cb.ConferenceBookingID
+									WHERE DayBookingID = @DayBookingID)
+
 	DECLARE @NumberOfReservations int = (SELECT COUNT(p.ParticipantID)
 										FROM DayReservations [dr]
 										JOIN Participants [p] ON dr.ParticipantID = p.ParticipantID
-										WHERE DayBookingID =  @DayBookingID AND (p.StudentCard IS NULL OR DATEDIFF (year,  GETDATE(), p.BirthDate) > 25))
+										WHERE DayBookingID =  @DayBookingID AND (p.StudentCard IS NULL OR DATEDIFF (year,  @DayBookingID, p.BirthDate) > 25))
 
 	RETURN (SELECT NumberOfParticipants - NumberOfStudents - @NumberOfReservations
 			FROM DayBookings
@@ -1235,10 +1241,16 @@ CREATE FUNCTION [FUNC_bookingDayFreeStudentsPlaces]
 RETURNS int
 AS
 BEGIN
+	DECLARE @ConferenceDate date = (SELECT StartDate
+										FROM Conferences [c]
+										JOIN ConferenceBookings [cb] ON c.ConferenceID = cb.ConferenceID
+										JOIN DayBookings [db] ON db.ConferenceBookingID = cb.ConferenceBookingID
+										WHERE DayBookingID = @DayBookingID)
+
 	DECLARE @NumberOfStudentReservations int = (SELECT COUNT(dr.ParticipantID)
 												FROM DayReservations [dr]
 												JOIN Participants [p] ON dr.ParticipantID = p.ParticipantID
-												WHERE DayBookingID =  @DayBookingID AND (p.StudentCard IS NOT NULL AND DATEDIFF (year,  GETDATE(), p.BirthDate) <= 25))
+												WHERE DayBookingID =  @DayBookingID AND (p.StudentCard IS NOT NULL AND DATEDIFF (year, @ConferenceDate , p.BirthDate) <= 25))
 	RETURN (SELECT NumberOfStudents - @NumberOfStudentReservations
 			FROM DayBookings
 			WHERE DayBookingID = @DayBookingID)
