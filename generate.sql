@@ -1,4 +1,4 @@
-USE test60
+USE test62
 /*
 EXEC PROC_addConference @Name = 'sadasdas',                -- varchar(1)
                             @StartDate = '2020-01-17', -- date
@@ -55,7 +55,7 @@ EXEC dbo.PROC_addWorkshop @DayID = 1,              -- int
                           @StartTime = '16:28:29', -- time(7)
                           @EndTime = '16:28:50',   -- time(7)
                           @Price = 34,           -- money
-                          @Classroom = 1,         -- varchar(1)
+                          @Classroom = 1,         
                           @BuildingID = 1          -- int
 
 EXEC dbo.PROC_addEmployee @Email = 'dsadasdsa@sadsd.com',   -- varchar(1)
@@ -100,26 +100,23 @@ EXEC dbo.PROC_addDayReservation @ParticipantID = 1, -- int
 EXEC dbo.PROC_addWorkshopReservation @DayReservationID = 1, -- int
                                      @WorkshopBookingID = 1 -- int
 
-		*/ /*
+		
 EXEC dbo.PROC_addWorkshop @DayID = 1,              -- int
                           @Title = 'fdsf',             -- varchar(1)
                           @MaxParticipants = 2,    -- int
-                          @StartTime = '9:30:29', -- time(7)
-                          @EndTime = '10:28:32',   -- time(7)
+                          @StartTime = '20:30:29', -- time(7)
+                          @EndTime = '21:28:32',   -- time(7)
                           @Price = 0,           -- money
-                          @Classroom = 1,         -- varchar(1)
+                          @Classroom = 2,         -- varchar(1)
                           @BuildingID = 1          -- int
-						  */
-
+						  
 						  SELECT * FROM dbo.Workshops
+						  SELECT dbo.FUNC_workshopStartDatetime(1)
+						  SELECT dbo.FUNC_doWorkshopsCollide(1,3)
 
 						  
-						  
-SELECT * FROM dbo.Workshops
-SELECT COUNT(w.WorkshopID)
-		FROM Workshops AS w
-		WHERE dbo.FUNC_doWorkshopsCollide(2 , w.WorkshopID) = 1
-		AND w.Classroom = 'df' AND w.BuildingID = 1 			
+						  */
+						  		
 										  
 /*											  
 SELECT * FROM dbo.Workshops
@@ -144,7 +141,17 @@ EXEC dbo.PROC_addWorkshopReservation @DayReservationID = 1, -- int
                                      @WorkshopBookingID = 3 -- int
 
 									 */
+/*
+EXEC dbo.PROC_addConference @Name = 'sdfalksdf',               -- nvarchar(255)
+                            @StartDate = '2019-01-07', -- date
+                            @EndDate = '2019-01-17'    -- date
+							*/
 
-
-
-									 
+/*
+EXEC dbo.PROC_addEmployee @Email = 'dsadjaisdas@dasdkjasdh.com',  -- nvarchar(50)
+                          @Password = 'fasdfawefsad' -- varchar(128)
+						  */
+/*
+EXEC dbo.PROC_addEmployeeToConference @EmployeeID = 2,  -- int
+                                      @ConferenceID = 1 -- int
+									  */
