@@ -2188,7 +2188,7 @@ AS
 	IF EXISTS
 	(
 		SELECT * FROM inserted AS i
-		WHERE dbo.FUNC_workshopDayFreeNormalPlaces(i.WorkshopBookingID) <= 0
+		WHERE dbo.FUNC_workshopDayFreeNormalPlaces(i.WorkshopBookingID) < 0
 	)
 		BEGIN
 		;THROW 50001, 'There are no more places that the client has booked.',1
