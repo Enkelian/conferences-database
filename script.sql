@@ -217,7 +217,7 @@ ALTER TABLE [WorkshopReservations] ADD FOREIGN KEY ([DayReservationID]) REFERENC
 GO
 
 CREATE PROCEDURE [PROC_addConference]
-@Name varchar,
+@Name nvarchar(255),
 @StartDate date,
 @EndDate date
 AS
@@ -372,12 +372,12 @@ GO
 
 CREATE PROCEDURE [PROC_addWorkshop]
 @DayID int,
-@Title varchar,
+@Title nvarchar(255),
 @MaxParticipants int,
 @StartTime time,
 @EndTime time,
 @Price money,
-@Classroom varchar,
+@Classroom varchar(50),
 @BuildingID int
 AS
 BEGIN
@@ -437,10 +437,10 @@ END
 GO
 
 CREATE PROCEDURE [PROC_addBuilding]
-@City NVARCHAR(200),
-@Address NVARCHAR(200), 
-@Name NVARCHAR(255), 
-@Phone VARCHAR(20)
+@City nvarchar(200),
+@Address nvarchar(200), 
+@Name nvarchar(255), 
+@Phone nvarchar(20)
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -458,7 +458,7 @@ END
 GO
 
 CREATE PROCEDURE [PROC_addEmployee]
-@Email varchar(50),
+@Email nvarchar(50),
 @Password varchar(128)
 AS
 BEGIN
@@ -512,7 +512,7 @@ GO
 CREATE PROCEDURE [PROC_addConferenceBooking]
 @ConferenceID int,
 @ClientID int,
-@BookingDate date
+@BookingDate datetime
 AS
 BEGIN
 	SET NOCOUNT ON
