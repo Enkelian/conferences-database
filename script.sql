@@ -230,6 +230,15 @@ BEGIN
 			END
 */
 
+			IF EXISTS(
+				SELECT Name, StartDate, EndDate
+				FROM Conferences
+				WHERE Name = @Name AND StartDate = @StartDate AND EndDate = @EndDate)
+
+			BEGIN
+			;THROW 52000, 'This conference has already been added', 1
+			END
+
 			INSERT INTO Conferences(Name, StartDate, EndDate, isCancelled) 
 			VALUES (@Name, @StartDate, @EndDate, 0)
 
@@ -1888,7 +1897,7 @@ AS
 		SELECT ToDate FROM inserted)
 	DECLARE @CurrentPrice money = (SELECT Value FROM inserted)
 
-	IF(@ToDate < 
+	IF(@ToDate > 
 			(SELECT StartDate
 			FROM Conferences
 			WHERE ConferenceID = @ConferenceID)
