@@ -1989,7 +1989,7 @@ AS
 
 		IF @DayNumber <> 1 AND (SELECT COUNT(*)
 								FROM Days
-								WHERE ConferenceID = @ConferenceID AND DayNumber = @DayNumber - 1) > 1
+								WHERE ConferenceID = @ConferenceID AND DayNumber = @DayNumber - 1) < 1
 		BEGIN
 		;THROW 50001, 'Cannot add a day that does not have a day that precedes it.', 1
 		END	
