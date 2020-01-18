@@ -1,4 +1,4 @@
-﻿USE [ConferencesFin]
+﻿USE [Conferences]
 GO
 
 CREATE TABLE [DayPrices] (
