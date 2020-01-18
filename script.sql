@@ -1501,7 +1501,7 @@ CREATE VIEW [VIEW_datesOfDays]
 AS
 	SELECT d.DayID AS 'DayID', DATEADD(day, d.DayNumber - 1, c.StartDate) AS 'Date'
 	FROM Days AS d
-	JOIN Conferences AS c ON c.ConferenceID = d.DayID
+	JOIN Conferences AS c ON c.ConferenceID = d.ConferenceID
 GO
 
 -- TRIGGERY
