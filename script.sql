@@ -1449,7 +1449,6 @@ AS
 	JOIN Conferences AS c ON c.ConferenceID = cb.ConferenceID
 	JOIN Payments AS P ON p.ConferenceBookingID = cb.ConferenceBookingID
 	WHERE cb.Status = 1
-	--WHERE cb.Status != -1 AND p.Total = FUNC_bookingCost( ConferenceBookingID )
 GO
 
 --13
@@ -1679,8 +1678,7 @@ AS
 	(
 		SELECT i.ConferenceBookingID FROM inserted AS i
 		JOIN ConferenceBookings AS cb ON cb.ConferenceBookingID = i.ConferenceBookingID
-		WHERE cb.Status != -1 
-		--AND dbo.FUNC_bookingCost(i.ConferenceBookingID) = i.Total
+		WHERE cb.Status != -1 AND dbo.FUNC_bookingCost(i.ConferenceBookingID) = i.Total
 	)
 END
 GO
