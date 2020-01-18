@@ -72,7 +72,7 @@ GO
 CREATE TABLE [Payments] (
   [PaymentID] int NOT NULL IDENTITY,
   [ConferenceBookingID] int NOT NULL,
-  [Total] money NOT NULL CHECK (Total > 0),
+  [Total] money NOT NULL CHECK (Total >= 0),
   [SendDate] datetime NOT NULL,
   [AcceptedDate] datetime NOT NULL
   CONSTRAINT PaymentsPK PRIMARY KEY (PaymentID)
@@ -1502,6 +1502,16 @@ AS
 	SELECT d.DayID AS 'DayID', DATEADD(day, d.DayNumber - 1, c.StartDate) AS 'Date'
 	FROM Days AS d
 	JOIN Conferences AS c ON c.ConferenceID = d.ConferenceID
+GO
+
+--15
+CREATE VIEW [VIEW_paymentsToReturn]
+AS
+	SELECT p.PaymentID, cb.ConferenceBookingID, c.ClientID, c.Name, c.Email, p.Total AS 'toReturn'
+	FROM Payments AS p
+	JOIN ConferenceBookings AS cb ON cb.ConferenceBookingID = p.ConferenceBookingID
+	JOIN Clients AS c ON cb.ClientID = c.ClientID
+	WHERE cb.Status = -1 AND p.Total != 0
 GO
 
 -- TRIGGERY
