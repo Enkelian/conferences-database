@@ -936,11 +936,22 @@ CREATE FUNCTION [FUNC_dayPriceAtDate]
 RETURNS money
 AS
 BEGIN
-	RETURN(
-		SELECT TOP 1 Value*@IsStudent*(1-StudentDiscount)
+	DECLARE @Result money = 0;
+	IF (@IsStudent = 1)
+	BEGIN
+		SET @result = (SELECT TOP 1 Value*(1-StudentDiscount)
 		FROM DayPrices
 		WHERE DayID = @DayID AND ToDate >= @Date
-		ORDER BY ToDate);
+		ORDER BY ToDate)
+	END
+	ELSE
+		BEGIN
+			SET @result = (SELECT TOP 1 Value
+			FROM DayPrices
+			WHERE DayID = @DayID AND ToDate >= @Date
+			ORDER BY ToDate)
+		END;
+	RETURN @Result;
 END
 GO
 
