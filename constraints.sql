@@ -1,0 +1,1 @@
+ALTER TABLE dbo.Employees ADD CONSTRAINT EmployeesPK PRIMARY KEY (EmployeeID)
