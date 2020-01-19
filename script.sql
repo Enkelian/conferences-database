@@ -1350,7 +1350,8 @@ CREATE VIEW [VIEW_availableDays]
 AS
     SELECT dp. *
     FROM VIEW_dayPlaces AS dp
-    WHERE dp.FreePlaces > 0
+	JOIN VIEW_datesOfDays AS dod ON dod.DayID = dp.DayID
+    WHERE dp.FreePlaces > 0 AND dod.Date >= GETDATE()
 GO
 
 --5
@@ -1381,7 +1382,7 @@ CREATE VIEW [VIEW_availableWorkshops]
 AS
 	SELECT wp. *
 	FROM VIEW_workshopPlaces AS wp
-	WHERE wp.FreePlaces > 0
+	WHERE wp.FreePlaces > 0 AND dbo.FUNC_WorkshopDate(wp.WorkshopID) >= GETDATE();
 GO
 
 --8
