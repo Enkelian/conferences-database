@@ -2294,9 +2294,14 @@ AS
 	BEGIN
 	SET NOCOUNT ON;
 	DECLARE @ConferenceBookingID int = (SELECT ConferenceBookingID FROM inserted)
+	DECLARE @Status int = (SELECT Status FROM ConferenceBookings WHERE ConferenceBookingID = @ConferenceBookingID)
 	IF NOT EXISTS (SELECT ConferenceBookingID FROM ConferenceBookings WHERE ConferenceBookingID = @ConferenceBookingID)
 	BEGIN
 	;THROW 50001, 'ConferenceBookingID does not exist',1
+	END
+	IF @Status = -1
+	BEGIN
+	; THROW 50001, 'ConferenceBooking is cancelled,', 1
 	END
 END
 GO
