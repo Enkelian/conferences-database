@@ -2026,12 +2026,17 @@ AS
 	DECLARE @ConferenceID int = (SELECT ConferenceID FROM inserted)
 	DECLARE @BookingDate datetime = (SELECT BookingDate FROM inserted)
 	DECLARE @ClientID int = (SELECT ClientID FROM inserted)
+	DECLARE @IsCancelledConference bit = (SELECT IsCancelled FROM Conferences WHERE ConferenceID = @ConferenceID)
 	IF (@ConferenceID NOT IN(
 			SELECT ConferenceID
 			FROM Conferences))
 		BEGIN
 		;THROW 50001, 'Conference with given ConferenceID does not exist', 1
 		END
+	IF @IsCancelledConference = 1
+		BEGIN
+		; THROW 50001, 'Conference is cancelled', 1
+	END
 	IF (@BookingDate > (
 			SELECT StartDate 
 			FROM Conferences
