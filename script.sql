@@ -1725,8 +1725,6 @@ AFTER UPDATE
 AS
 	BEGIN
 	SET NOCOUNT ON;
-	
-	DECLARE @DayBookingID int = (SELECT DayBookingID FROM inserted)
 
 	DELETE FROM WorkshopReservations
 	WHERE WorkshopReservationID IN
