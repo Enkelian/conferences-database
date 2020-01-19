@@ -1865,7 +1865,12 @@ AS
 	DECLARE @ToDate date = (
 		SELECT ToDate FROM inserted)
 	DECLARE @CurrentPrice money = (SELECT Value FROM inserted)
+	DECLARE @IsConferenceCancelled bit = (SELECT IsCancelled FROM Conferences WHERE ConferenceID = @ConferenceID)
 
+	IF @IsConferenceCancelled = 1
+		BEGIN
+		; THROW 50001, 'Conference is cancelled.', 1
+		END
 	IF(@ToDate > 
 			(SELECT StartDate
 			FROM Conferences
