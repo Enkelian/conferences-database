@@ -1389,10 +1389,10 @@ GO
 CREATE VIEW [VIEW_workshopsPopularity] 
 AS
 	SELECT TOP 10
-	        wa.*,
-	        CAST(1.0 * wa.BookedPlaces / wa.TotalPlaces AS decimal(5,4)) AS 'Occupancy'
-	FROM VIEW_availableWorkshops AS wa
-	ORDER BY 1.0 * wa.BookedPlaces / wa.TotalPlaces DESC
+	        wp.*,
+	        CAST(1.0 * wp.BookedPlaces / wp.TotalPlaces AS decimal(5,4)) AS 'Occupancy'
+	FROM VIEW_workshopPlaces AS wp
+	ORDER BY 1.0 * wp.BookedPlaces / wp.TotalPlaces DESC
 GO
 
 --9
