@@ -2070,6 +2070,10 @@ AS
 	SET NOCOUNT ON
 	BEGIN
 	DECLARE @DayID int = (SELECT DayID FROM inserted)
+	DECLARE @ClientID int = (SELECT ClientID FROM inserted AS i
+							JOIN ConferenceBookings AS cb ON i.ConferenceBookingID = cb.ConferenceBookingID)
+	DECLARE @IsPerson bit = (SELECT IsPerson FROM Clients WHERE ClientID = @ClientID)
+	DECLARE @Participants int = (SELECT NumberOfParticipants FROM inserted)
 	DECLARE @ConferenceBookingStatus int = (
 			SELECT cb.Status
 			FROM ConferenceBookings AS cb
@@ -2111,6 +2115,10 @@ AS
 	)
 	BEGIN
 	;THROW 50001, 'Booking day from wrong conference.',1
+	END
+	IF @IsPerson = 1 AND @Participants > 1
+	BEGIN
+	; THROW 50001, 'Individual client cannot book more than one place,', 1
 	END
 
 END
