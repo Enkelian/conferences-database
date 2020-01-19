@@ -1667,23 +1667,6 @@ AS
 END
 GO
 
---9
-CREATE TRIGGER [ TRIG_removeWorkshopReservation ]
-ON DayReservations
-AFTER DELETE
-AS
-	BEGIN
-	SET NOCOUNT ON;
-	DELETE FROM WorkshopReservations
-	WHERE WorkshopReservationID IN
-	(
-		SELECT wr.WorkshopReservationID
-		FROM deleted AS d
-		JOIN WorkshopReservations AS wr ON wr.DayReservationID = d.DayReservationID
-	)
-END
-GO
-
 --10
 CREATE TRIGGER [ TRIG_confirmConferenceBookingPayment ]
 ON Payments
@@ -1742,6 +1725,20 @@ AFTER UPDATE
 AS
 	BEGIN
 	SET NOCOUNT ON;
+	
+	DECLARE @DayBookingID int = (SELECT DayBookingID FROM inserted)
+
+	DELETE FROM WorkshopReservations
+	WHERE WorkshopReservationID IN
+	(
+		SELECT wr.WorkshopReservationID
+		FROM inserted AS i
+		JOIN deleted AS d ON d.DayBookingID = i.DayBookingID
+		JOIN DayReservations AS dr ON dr.DayBookingID = i.DayBookingID
+		JOIN WorkshopReservations AS wr ON wr.DayReservationID = dr.DayReservationID
+		WHERE d.Status != -1 AND i.Status = -1
+	)
+
 	DELETE FROM DayReservations
 	WHERE DayReservationID IN
 	(
