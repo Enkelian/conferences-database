@@ -891,6 +891,18 @@ BEGIN
 END 
 GO
 
+CREATE PROCEDURE PROC_cancelUnpaidBookings
+AS
+BEGIN
+	SET NOCOUNT ON;
+	UPDATE dbo.ConferenceBookings
+	SET Status = -1
+	FROM dbo.ConferenceBookings [cb]
+	JOIN dbo.[ VIEW_unpaidOnTimeConferenceBookings ] [v] ON v.ConferenceBookingID = cb.ConferenceBookingID
+	WHERE cb.ConferenceBookingID = v.ConferenceBookingID
+END
+GO
+
 --FUNC_conferenceAttendeeList(cb.ConferenceID)
 --FUNC_paymentsSum ( ConferenceBookingID )
 --FUNC_paymentsLeft ( ConferenceBookingID )
