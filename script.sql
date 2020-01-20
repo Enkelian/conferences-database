@@ -225,12 +225,6 @@ BEGIN
 	SET NOCOUNT ON;
 		BEGIN TRY
 
-/*			IF(@StartDate < GETDATE())
-			BEGIN
-			;THROW 52000, 'New conference cannot be in the past', 1
-			END
-*/
-
 			IF EXISTS(
 				SELECT Name, StartDate, EndDate
 				FROM Conferences
@@ -260,37 +254,6 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	BEGIN TRY
-		/*IF NOT EXISTS(
-			SELECT DayID 
-			FROM Days
-			WHERE DayID = @DayID)
-		BEGIN
-		;THROW 52000, 'Day with given DayID does not exist.', 1
-		END
-
-		DECLARE @ConferenceID int = (
-			SELECT ConferenceID
-			FROM Days
-			WHERE DayID = @DayID)
-
-		IF(@ToDate < 
-			(SELECT StartDate
-			FROM Conferences
-			WHERE ConferenceID = @ConferenceID)
-			)
-		BEGIN
-		;THROW 52000, 'Date cannot follow conference start date', 1
-		END
-
-		DECLARE @isConferenceCancelled int = (
-			SELECT isCancelled
-			FROM Conferences
-			WHERE ConferenceID = @ConferenceID)
-
-		IF (@isConferenceCancelled = 1)
-		BEGIN
-		;THROW 52000, 'Cannot add price to cancelled conference.', 1
-		END*/
 
 		INSERT INTO DayPrices(DayID, Value, ToDate, StudentDiscount)
 		VALUES(@DayID, @Value, @ToDate, @StudentDiscount)
@@ -312,42 +275,7 @@ CREATE PROCEDURE [PROC_addDay]
 AS
 BEGIN
 	SET NOCOUNT ON
-	BEGIN TRY
-		
-		/*IF NOT EXISTS (
-			SELECT ConferenceID
-			FROM Conferences
-			WHERE ConferenceID = @ConferenceID)
-		BEGIN
-		;THROW 52000, 'Conference with given ConferenceID does not exist.', 1
-		END
-
-		IF(@MaxParticipants <= 0)
-		BEGIN
-		;THROW 52000, 'Number of participants must be a positive number.',1
-		END
-
-		IF(@DayNumber IN(
-			SELECT DayNumber
-			FROM Days
-			WHERE ConferenceID = @ConferenceID))
-		BEGIN
-		;THROW 52000, 'Day with that number already exists', 1
-		END
-
-		IF @DayNumber = 1 AND (SELECT COUNT(DayNumber)
-								FROM Days
-								WHERE ConferenceID = @ConferenceID) > 0
-		BEGIN
-		;THROW 52000, 'Cannot add first day if there are already any days of conference', 1
-		END
-
-		IF @DayNumber <> 1 AND (SELECT COUNT(*)
-								FROM Days
-								WHERE ConferenceID = @ConferenceID AND DayNumber = @DayNumber - 1) = 0
-		BEGIN
-		;THROW 52000, 'Cannot add a day that does not have a day that precedes it.', 1
-		END	*/				
+	BEGIN TRY	
 
 		INSERT INTO Days(ConferenceID, MaxParticipants, DayNumber)
 		VALUES(@ConferenceID, @MaxParticipants, @DayNumber)
@@ -383,22 +311,6 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	BEGIN TRY
-	
-		/*IF NOT EXISTS(
-		SELECT DayID 
-		FROM Days
-		WHERE DayID = @DayID)
-		BEGIN
-		;THROW 52000, 'Day with given DayID does not exist.', 1
-		END
-
-		IF NOT EXISTS(
-			SELECT BuildingID
-			FROM Buildings
-			WHERE BuildingID = @BuildingID)
-		BEGIN
-		;THROW 52000, 'Building with given BuildingID does not exist.', 1
-		END*/
 
 		IF(@MaxParticipants <= 0)
 		BEGIN
@@ -484,20 +396,6 @@ BEGIN
 	SET NOCOUNT ON
 	BEGIN TRY
 
-		/*IF @EmployeeID NOT IN (
-			SELECT EmployeeID
-			FROM Employees)
-		BEGIN
-		;THROW 52000, 'Employee with given EmployeeID does not exist', 1
-		END
-
-		IF @ConferenceID NOT IN (
-			SELECT ConferenceID
-			FROM Conferences)
-		BEGIN
-		;THROW 52000, 'Conference with given ConferenceID does not exist', 1
-		END*/
-
 		INSERT INTO EmployeesConferences (ConferenceID, EmployeeID)
 		VALUES(@ConferenceID, @EmployeeID)
 
@@ -518,36 +416,6 @@ BEGIN
 	SET NOCOUNT ON
 	BEGIN TRY
 		
-		/*IF (@ConferenceID NOT IN(
-			SELECT ConferenceID
-			FROM Conferences))
-		BEGIN
-		;THROW 52000, 'Conference with given ConferenceID does not exist', 1
-		END
-		
-		IF (@BookingDate > (
-			SELECT StartDate 
-			FROM Conferences
-			WHERE ConferenceID = @ConferenceID))
-		BEGIN
-		;THROW 52000, 'Chosen conference already took place.', 1
-		END
-
-		IF(@ClientID NOT IN(
-			SELECT ClientID
-			FROM Clients))
-		BEGIN
-		;THROW 52000, 'Client with given ClientID does not exist.', 1
-		END
-
-		IF EXISTS(
-			SELECT ClientID
-			FROM ConferenceBookings
-			WHERE ClientID = @ClientID AND ConferenceID = @ConferenceID)
-		BEGIN
-		;THROW 52000, 'Cannot add already existing booking.', 1
-		END*/
-
 		INSERT INTO ConferenceBookings(ConferenceID, ClientID, Status, BookingDate)
 		VALUES(@ConferenceID, @ClientID, 0, @BookingDate)
 
@@ -569,13 +437,6 @@ BEGIN
 	SET NOCOUNT ON
 	BEGIN TRY
 		
-		/*IF @DayID NOT IN (
-			SELECT DayID
-			FROM Days)
-		BEGIN
-		;THROW 52000, 'Day with given DayID does not exist.', 1
-		END*/
-
 		IF @NumberOfParticipants <= 0
 		BEGIN
 		;THROW 52000, 'NumberOfParticipants must be a positive number', 1
@@ -600,13 +461,6 @@ BEGIN
 		BEGIN
 		;THROW 52000, 'Conference booking has been cancelled', 1
 		END
-
-		/*IF @ConferenceBookingID NOT IN(
-			SELECT ConferenceBookingID
-			FROM ConferenceBookings)
-		BEGIN
-		;THROW 52000, 'Booking with given ConferenceBookingID does not exist.', 1
-		END*/
 
 		DECLARE @ConferenceID int = (
 			SELECT ConferenceID
@@ -642,25 +496,11 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	BEGIN TRY
-		
-		/*IF @WorkshopID NOT IN (
-			SELECT WorkshopID
-			FROM Workshops)
-		BEGIN
-		;THROW 52000, 'Workshop with given WorkshopID does not exist', 1
-		END*/
-	
+
 		IF(@NumberOfParticipants <= 0)
 		BEGIN
 		;THROW 52000, 'NumberOfParticipants must be a positive number', 1
 		END
-
-		/*IF @DayBookingID NOT IN(
-			SELECT DayBookingID
-			FROM DayBookings)
-		BEGIN
-		;THROW 52000, 'Booking with given DayBookingID does not exist', 1
-		END*/
 
 		DECLARE @DayBookingStatus int = (
 			SELECT Status
@@ -709,20 +549,6 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	BEGIN TRY
-		
-		/*IF @ParticipantID NOT IN (
-			SELECT ParticipantID
-			FROM Participants)
-		BEGIN
-		;THROW 52000, 'Participant with given ParticipantID does not exist', 1
-		END
-
-		IF @DayBookingID NOT IN (
-			SELECT DayBookingID
-			FROM DayBookings)
-		BEGIN
-		;THROW 52000, 'Day booking with given DayBookingID does not exist', 1
-		END*/
 	
 		INSERT INTO DayReservations(ParticipantID, DayBookingID)
 		VALUES(@ParticipantID, @DayBookingID)
@@ -813,18 +639,6 @@ BEGIN
 	SET NOCOUNT ON
 	BEGIN TRY
 		
-
-		/*IF (SELECT IsPerson
-			FROM Clients
-			WHERE ClientID = @ClientID) = 1 AND
-			((SELECT COUNT(ParticipantID)
-			FROM Participants
-			WHERE ClientID = @ClientID) > 0)
-		BEGIN
-		;THROW 52000, 'Individual client can have only one participant', 1
-		END*/
-
-
 		INSERT INTO Participants(ClientID, FirstName, LastName, StudentCard, BirthDate, Email, Password)
 		VALUES (@ClientID, @FirstName, @LastName, @StudentCard, @BirthDate, @Email, @Password)
 
@@ -846,13 +660,6 @@ BEGIN
 	SET NOCOUNT ON 
 	BEGIN TRY
 		
-		/*IF @ConferenceBookingID NOT IN (
-			SELECT ConferenceBookingID
-			FROM ConferenceBookings)
-		BEGIN
-		;THROW 52000, 'Conference booking with given ConferenceBookingID does not exist.', 1
-		END*/
-
 		IF @SendDate > @AcceptedDate
 		BEGIN
 		;THROW 52000, 'SendDate cannot be after AcceptedDate', 1
@@ -903,12 +710,6 @@ BEGIN
 END
 GO
 
---FUNC_conferenceAttendeeList(cb.ConferenceID)
---FUNC_paymentsSum ( ConferenceBookingID )
---FUNC_paymentsLeft ( ConferenceBookingID )
-
---zwraca sumę kosztów warsztatów dla danego zamówienia
---znizka studencka obowiazuje tylko dla kosztu konferencji
 CREATE FUNCTION [FUNC_workshopsCost]
 	(
 		@ConferenceBookingID int
@@ -936,41 +737,13 @@ CREATE FUNCTION [FUNC_dayPriceAtDate]
 RETURNS money
 AS
 BEGIN
-	DECLARE @Result money = 0;
-	IF (@IsStudent = 1)
-	BEGIN
-		SET @result = (SELECT TOP 1 Value*(1-StudentDiscount)
+	RETURN(
+		SELECT TOP 1 Value*@IsStudent*(1-StudentDiscount)
 		FROM DayPrices
 		WHERE DayID = @DayID AND ToDate >= @Date
-		ORDER BY ToDate)
-	END
-	ELSE
-		BEGIN
-			SET @result = (SELECT TOP 1 Value
-			FROM DayPrices
-			WHERE DayID = @DayID AND ToDate >= @Date
-			ORDER BY ToDate)
-		END;
-	RETURN @Result;
+		ORDER BY ToDate);
 END
 GO
-
---NIE POTRZEBUJE NumberOfStudents!!!!
-/*CREATE FUNCTION [FUNC_studentsInDayBooking]
-	(
-		@DayBookingID int
-	)
-RETURNS INT
-AS
-BEGIN
-	RETURN(
-		SELECT COUNT(*)
-		FROM DayBookings [db]
-		INNER JOIN DayReservations [dr] ON db.DayBookingID = dr.DayBookingID
-		INNER JOIN Participants [p] ON dr.PatricipantID = p.ParticipantID
-		WHERE StudentCard IS NOT NULL)
-END
-GO*/
 
 CREATE FUNCTION [FUNC_dayBookingCost]
 	(
