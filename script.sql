@@ -710,6 +710,29 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [PROC_changePlacesForDay]
+@DayID INT,
+@NewPlaces INT
+
+AS BEGIN
+	SET NOCOUNT ON
+	UPDATE dbo.Days
+	SET MaxParticipants = @NewPlaces
+	WHERE DayID = @DayID
+END
+GO
+
+CREATE PROCEDURE [PROC_changePlacesForWorkshop]
+@WorkshopID INT,
+@NewPlaces INT
+
+AS BEGIN
+	SET NOCOUNT ON
+	UPDATE dbo.Workshops
+	SET MaxParticipants = @NewPlaces
+	WHERE WorkshopID = @WorkshopID
+END
+
 CREATE FUNCTION [FUNC_workshopsCost]
 	(
 		@ConferenceBookingID int
