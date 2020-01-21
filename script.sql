@@ -732,6 +732,7 @@ AS BEGIN
 	SET MaxParticipants = @NewPlaces
 	WHERE WorkshopID = @WorkshopID
 END
+GO
 
 CREATE FUNCTION [FUNC_workshopsCost]
 	(
